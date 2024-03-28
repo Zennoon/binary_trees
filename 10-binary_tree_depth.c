@@ -6,6 +6,7 @@
  *
  * Description: Depth of a node is the number of edges between the root of the
  * tree and the node
+ * Return: Depth of the node in the tree
  */
 size_t binary_tree_depth(const binary_tree_t *tree)
 {

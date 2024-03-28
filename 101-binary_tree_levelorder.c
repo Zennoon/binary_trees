@@ -56,6 +56,8 @@ size_t binary_tree_depth(const binary_tree_t *tree)
  * a function for the value held in each node
  * @tree: Pointer to the root node of the tree to traverse
  * @func: The function to call for the values in the nodes
+ * @h: Height of the original tree
+ * @d: Current depth we are looking for
  *
  * Description: Pre-order traversal visits root then left-subtree then
  * right-subtree.
@@ -64,13 +66,13 @@ size_t binary_tree_depth(const binary_tree_t *tree)
 void binary_tree_pre_order(const binary_tree_t *tree, void (*func)(int),
 			   size_t h, size_t d)
 {
-        if (tree && func)
-        {
+	if (tree && func)
+	{
 		if (binary_tree_depth(tree) == d)
 			func(tree->n);
-                binary_tree_pre_order(tree->left, func, h, d);
-                binary_tree_pre_order(tree->right, func, h, d);
-        }
+		binary_tree_pre_order(tree->left, func, h, d);
+		binary_tree_pre_order(tree->right, func, h, d);
+	}
 }
 
 /**

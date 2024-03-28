@@ -7,7 +7,7 @@
  * @value: The value to be stored in the new node
  *
  * Description: If the parent node already has a right child, it is replaced
- * with the new one, and the old child becomes the right child of this new node.
+ * with the new one, and the old child becomes right child of this new node.
  * Return: Pointer to the new node on success, NULL otherwise
  */
 binary_tree_t *binary_tree_insert_right(binary_tree_t *parent, int value)

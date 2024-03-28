@@ -1,7 +1,7 @@
 #include "binary_trees.h"
 
 /**
- * binary_tree_is_leaf - Checks if a binary tree node is a leaf node or not
+ * is_leaf - Checks if a binary tree node is a leaf node or not
  * @node: Pointer to the node to check
  *
  * Description: A leaf node is a node that doesn't have any children
@@ -27,7 +27,7 @@ size_t binary_tree_leaves(const binary_tree_t *tree)
 		size_t left_leaves = binary_tree_leaves(tree->left);
 		size_t right_leaves = binary_tree_leaves(tree->right);
 
-		return (is_leaf(tree) + left_leaves + right_leaves);
+		return (binary_tree_is_leaf(tree) + left_leaves + right_leaves);
 	}
 	return (0);
 }

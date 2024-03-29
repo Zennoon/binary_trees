@@ -3,19 +3,6 @@
 #define QUEUE_SIZE 100
 
 /**
- * struct queue_s - A simple queue implementation using an array
- * @q_arr: The queue (an array)
- * @front: The index of the first element in the queue
- * @rear: The current insertion index (index of last element + 1)
- */
-typedef struct queue_s
-{
-	const binary_tree_t **q_arr;
-	int front;
-	int rear;
-} queue_t;
-
-/**
  * enqueue - Insert into a queue
  * @queue: Pointer to the queue to insert to
  * @node: The binary tree node to insert to the queue

@@ -13,14 +13,22 @@ int check_bst(const binary_tree_t *tree)
 		if ((tree->left && tree->n <= tree->left->n) ||
 		    (tree->right && tree->n >= tree->right->n))
 			return (0);
-		if (tree->parent && tree->parent->parent)
+		if (tree->parent)
 		{
-			if (tree->parent == tree->parent->parent->left &&
-			    tree->n >= tree->parent->parent->n)
-				return (0);
-			if (tree->parent == tree->parent->parent->right &&
-			    tree->n <= tree->parent->parent->n)
-				return (0);
+			binary_tree_t *grand_ancestor = tree->parent->parent;
+			binary_tree_t *ancestor = tree->parent;
+
+			while (grand_ancestor)
+			{
+				if (ancestor == grand_ancestor->left &&
+				    tree->n >= grand_ancestor->n)
+					return (0);
+				if (ancestor == grand_ancestor->right &&
+				    tree->n <= grand_ancestor->n)
+					return (0);
+				ancestor = grand_ancestor;
+				grand_ancestor = grand_ancestor->parent;
+			}
 		}
 		return (check_bst(tree->left) && check_bst(tree->right));
 	}

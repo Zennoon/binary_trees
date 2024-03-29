@@ -1,93 +1,94 @@
 #include "binary_trees.h"
 
+#define QUEUE_SIZE 100
+
 /**
- * max - Returns the maximum of two positive numbers
- * @n1: First number
- * @n2: Second number
- *
- * Return: The greatest of the two arguments
+ * struct queue_s - A simple queue implementation using an array
+ * @q_arr: The queue (an array)
+ * @front: The index of the first element in the queue
+ * @rear: The current insertion index (index of last element + 1)
  */
-size_t max(size_t n1, size_t n2)
+typedef struct queue_s
 {
-	if (n1 >= n2)
-		return (n1);
-	return (n2);
-}
+	const binary_tree_t **q_arr;
+	int front;
+	int rear;
+} queue_t;
 
 /**
- * binary_tree_height - Returns the height of a binary tree
- * @tree: Pointer to the root node of the tree to measure
+ * enqueue - Insert into a queue
+ * @queue: Pointer to the queue to insert to
+ * @node: The binary tree node to insert to the queue
  *
- * Description: Height of a tree is the length of the longest path from a root
- * to a leaf.
- * Return: Height of the given binary tree
- */
-size_t binary_tree_height(const binary_tree_t *tree)
-{
-	if (tree && (tree->left || tree->right))
-	{
-		size_t left_height = 1 + binary_tree_height(tree->left);
-		size_t right_height = 1 + binary_tree_height(tree->right);
-
-		return (max(left_height, right_height));
-	}
-	return (0);
-}
-
-/**
- * binary_tree_depth - Measures the depth of a given node in a binary tree
- * @tree: Pointer to the node whose depth is measured
- *
- * Description: Depth of a node is the number of edges between the root of the
- * tree and the node
- * Return: Depth of the node in the tree
- */
-size_t binary_tree_depth(const binary_tree_t *tree)
-{
-	if (tree && tree->parent)
-	{
-		return (1 + binary_tree_depth(tree->parent));
-	}
-	return (0);
-}
-
-/**
- * binary_tree_pre_order - Traverses a binary tree in preorder fashion, calling
- * a function for the value held in each node
- * @tree: Pointer to the root node of the tree to traverse
- * @func: The function to call for the values in the nodes
- * @h: Height of the original tree
- * @d: Current depth we are looking for
- *
- * Description: Pre-order traversal visits root then left-subtree then
- * right-subtree.
  * Return: void
  */
-void binary_tree_pre_order(const binary_tree_t *tree, void (*func)(int),
-			   size_t h, size_t d)
+void enqueue(queue_t *queue, const binary_tree_t *node)
 {
-	if (tree && func)
+	if (queue->rear < QUEUE_SIZE && node)
 	{
-		if (binary_tree_depth(tree) == d)
-			func(tree->n);
-		binary_tree_pre_order(tree->left, func, h, d);
-		binary_tree_pre_order(tree->right, func, h, d);
+		queue->q_arr[queue->rear] = node;
+		queue->rear++;
 	}
+}
+
+/**
+ * dequeue - Pop/dequeue from a queue
+ * @queue: Pointer to the queue to dequeue from
+ *
+ * Return: void
+ */
+void dequeue(queue_t *queue)
+{
+	if (queue->front < queue->rear)
+	{
+		queue->front++;
+	}
+}
+
+/**
+ * top - Return the node on the top on a queue
+ * @queue: Pointer to the queue whose top element is returned
+ *
+ * Return: Pointer to the binary tree node at the top of the queue, or
+ * NULL if queue is empty
+ */
+const binary_tree_t *top(queue_t *queue)
+{
+	if (queue->front < queue->rear)
+		return (queue->q_arr[queue->front]);
+	return (NULL);
 }
 
 /**
  * binary_tree_levelorder - Traverses a binary tree in level-order fashion
+ * using a queue
  * @tree: Pointer to the root node of the tree to traverse
- * @func: Function to be called on each node's value
+ * @func: The function to call on every node's value
  *
- * Description: Level-order traversal visits nodes in the same level (depth)
- * before going down
+ * Description: Level-order traversal visits all the nodes on the same level
+ * before going down. It is breadth-first, as opposed to depth first
  * Return: void
  */
 void binary_tree_levelorder(const binary_tree_t *tree, void (*func)(int))
 {
-	size_t h = binary_tree_height(tree), d;
+	if (tree && func)
+	{
+		queue_t queue;
 
-	for (d = 0; d <= h; d++)
-		binary_tree_pre_order(tree, func, h, d);
+		queue.q_arr = malloc(sizeof(binary_tree_t *) * QUEUE_SIZE);
+		queue.front = 0;
+		queue.rear = 0;
+
+		enqueue(&queue, tree);
+		while (queue.front < queue.rear)
+		{
+			const binary_tree_t *top_node = top(&queue);
+
+			func(top_node->n);
+			enqueue(&queue, top_node->left);
+			enqueue(&queue, top_node->right);
+			dequeue(&queue);
+		}
+		free(queue.q_arr);
+	}
 }

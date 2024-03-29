@@ -52,7 +52,7 @@ void bst_replace(bst_t *node, bst_t *successor)
 	{
 		if (node == node_parent->left)
 			node_parent->left = NULL;
-		else:
+		else
 			node_parent->right = NULL;
 	}
 	else
@@ -64,7 +64,7 @@ void bst_replace(bst_t *node, bst_t *successor)
 		else
 			s_parent->right = NULL;
 		if (successor->right)
-			successor->right->parent = successor_parent;
+			successor->right->parent = s_parent;
 		successor->parent = node_parent;
 		if (node_parent && node == node_parent->left)
 			node_parent->left = successor;
@@ -96,7 +96,7 @@ bst_t *bst_remove(bst_t *root, int value)
 
 	if (node)
 	{
-		bst_t *successor = NULL, *parent = node->parent;
+		bst_t *successor = NULL;
 
 		if (node->left && node->right)
 			successor = in_order_successor(node);
@@ -108,7 +108,7 @@ bst_t *bst_remove(bst_t *root, int value)
 		bst_replace(node, successor);
 		root = node;
 		while (root->parent)
-			roor = root->parent;
+			root = root->parent;
 		free(node);
 	}
 	return (root);

@@ -48,6 +48,7 @@ bst_t *bst_search1(const bst_t *tree, int value)
 void bst_replace(bst_t *node, bst_t *successor)
 {
 	bst_t *node_parent = node->parent;
+
 	if (!successor)
 	{
 		if (node == node_parent->left)
